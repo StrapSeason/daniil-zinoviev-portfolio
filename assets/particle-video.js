@@ -308,6 +308,8 @@ function createParticleVideo(container, options = {}) {
 
   const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const STAGES = opts.explodeT != null ? opts.contentStages + 1 : opts.contentStages;
+  const MAX_RATE = 4;      /* fastest catch-up playback before we seek instead */
+  const SEEK_GAP = 3.5;    /* seconds behind target at which playing is hopeless */
   const COUNT = opts.gridW * opts.gridH;
 
   /* ---- DOM ---- */
@@ -511,7 +513,7 @@ function createParticleVideo(container, options = {}) {
       ? stage * calmEnd / opts.contentStages
       : dur - 0.05;
     if (dir > 0) video.play().catch(() => {});
-    else { video.pause(); video.currentTime = videoTarget; }
+    else { video.pause(); video.playbackRate = 1; video.currentTime = videoTarget; }
   }
 
   /* ---- input ---- */
@@ -548,7 +550,15 @@ function createParticleVideo(container, options = {}) {
     const dt = Math.min((t - prevT) * 0.001, 0.1);
     prevT = t;
 
-    if (!video.paused && video.currentTime >= videoTarget) video.pause();
+    if (video.paused) video.playbackRate = 1;
+    else {
+      // The stage throttle can queue targets far faster than 1x playback reaches
+      // them, so catch up on rate and hard-seek when the gap is hopeless.
+      const gap = videoTarget - video.currentTime;
+      if (gap <= 0) { video.pause(); video.playbackRate = 1; }
+      else if (gap > SEEK_GAP) { video.currentTime = videoTarget - 0.4; video.playbackRate = MAX_RATE; }
+      else video.playbackRate = gap > 0.8 ? Math.min(MAX_RATE, 1 + gap) : 1;
+    }
     if (video.readyState >= 2) {
       gl.bindTexture(gl.TEXTURE_2D, tex);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, video);
@@ -588,6 +598,16 @@ function createParticleVideo(container, options = {}) {
     step,
     get stage() { return stage; },
     get stages() { return STAGES; },
+    /* 0..1 across the final explode stage, so callers can time overlays to it */
+    get outroProgress() {
+      if (stage < STAGES) return 0;
+      if (opts.explodeT == null) return 1;
+      const dur = video.duration || 10;
+      const from = Math.min(opts.explodeT, dur);
+      const span = Math.max(0.01, dur - 0.05 - from);
+      const at = (video.currentTime - from) / span;
+      return at < 0 ? 0 : at > 1 ? 1 : at;
+    },
     video,
     destroy() {
       destroyed = true;

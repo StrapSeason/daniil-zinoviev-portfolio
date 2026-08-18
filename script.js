@@ -125,7 +125,9 @@ dialog.addEventListener("click", (event) => {
     intro.style.opacity = String(1 - out);
     intro.style.transform = `translateY(${-out * 40}px)`;
 
-    const inn = ease(progress, 0.9, 0.99);
+    // Scroll position alone runs ahead of the particle field, which is capped by
+    // the stage throttle and by playback; gate the headline on the field itself.
+    const inn = Math.min(ease(progress, 0.9, 0.99), pv.outroProgress);
     outro.style.opacity = String(inn);
     outro.style.transform = `translateY(${(1 - inn) * 24}px)`;
 
