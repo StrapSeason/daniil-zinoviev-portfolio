@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Every Bali case study by Daniil Zinoviev — responsive real-estate website, UX, filtering and visual design." />
+    <meta name="theme-color" content="#9a8d76" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <title>Every Bali — Daniil Zinoviev</title>
+    <link rel="stylesheet" href="case.css" />
+    <script src="case.js" defer></script>
+  </head>
+  <body class="bali-page">
+    <nav class="case-nav">
+      <a href="index.html#work">← <span>All work</span></a>
+      <a class="brand" href="index.html">Daniil Zinoviev</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <main>
+      <header class="case-hero">
+        <img class="hero-image" src="assets/every-bali-hero.png" alt="Every Bali residential development at sunset" />
+        <p class="kicker reveal">Case 04 · Real estate · Bali</p>
+        <h1 class="reveal">Every Bali</h1>
+        <div class="hero-bottom reveal">
+          <p>A responsive property experience combining cinematic storytelling, detailed discovery and an interactive masterplan.</p>
+          <div class="hero-facts">
+            <div><small>Role</small><span>End-to-end Web / Product Designer</span></div>
+            <div><small>Period</small><span>2026</span></div>
+            <div><small>Status</small><span>Launched</span></div>
+          </div>
+        </div>
+      </header>
+
+      <section class="case-section reveal">
+        <p class="section-label">01 / Challenge</p>
+        <p class="statement">The website had to sell a destination and still function as a <em>practical property-selection tool.</em></p>
+        <div class="text-grid">
+          <h2>Emotion first. Detail exactly when it matters.</h2>
+          <p>I designed the information structure, UX, filtering logic and visual experience across desktop and mobile. Copywriting was outside my scope. The key design problem was balancing immersive storytelling with a large inventory of apartments, villas and detailed property attributes.</p>
+        </div>
+      </section>
+
+      <section class="desktop-experience reveal">
+        <div class="desktop-experience-heading">
+          <p class="section-label">02 / Desktop &amp; motion</p>
+          <h2>The main experience is a cinematic, scroll-driven desktop narrative.</h2>
+          <p>Large typography, pinned scenes and spatial transitions build desire before the interface shifts into property discovery. The case isolates the strongest motion moment instead of reproducing the complete website.</p>
+        </div>
+        <div class="desktop-motion-demo" data-bali-scene>
+          <img src="assets/every-bali-desktop-hero-live.png" alt="Every Bali desktop hero architecture" />
+          <div class="desktop-demo-nav"><span>Complex</span><span>Villas &amp; Apts</span><strong>EVERY BALI</strong><span>Infrastructure</span><span>About</span></div>
+          <div class="desktop-demo-title"><small>Bali for every</small><span>ONE</span><span class="outline">SEEKER</span></div>
+          <div class="desktop-demo-meta"><span>Bali, Indonesia</span><span>Live and invest in a vibrant<br />community by the ocean</span></div>
+        </div>
+        <div class="motion-principles">
+          <p><small>01</small><span>Layered type transitions</span></p>
+          <p><small>02</small><span>Scroll-pinned scenes</span></p>
+          <p><small>03</small><span>Depth through scale and parallax</span></p>
+        </div>
+        <a class="desktop-live-link" href="https://www.every-bali.com/" target="_blank" rel="noreferrer">Experience the complete live website ↗</a>
+      </section>
+
+      <section class="case-section reveal">
+        <p class="section-label">03 / Discovery logic</p>
+        <p class="statement">One journey connects the destination, masterplan and <em>individual units.</em></p>
+        <ul class="system-list">
+          <li><small>01</small><span>Build desire through architecture and place</span><em>Interest</em></li>
+          <li><small>02</small><span>Navigate the masterplan and infrastructure</span><em>Context</em></li>
+          <li><small>03</small><span>Switch between apartment and villa inventory</span><em>Discovery</em></li>
+          <li><small>04</small><span>Filter by category, size, bedroom, view and price</span><em>Choice</em></li>
+          <li><small>05</small><span>Compare unit features and request an offer</span><em>Action</em></li>
+        </ul>
+      </section>
+
+      <section class="interactive-masterplan reveal" data-masterplan>
+        <div class="masterplan-heading">
+          <p>Interactive masterplan</p>
+          <h2>Choose a point.<br />Inspect a unit.</h2>
+          <span>This portfolio version uses the original launched map and real unit data. Click the markers to explore.</span>
+        </div>
+        <div class="masterplan-shell">
+          <img class="masterplan-image" src="assets/every-bali-map-live.webp" alt="Every Bali interactive masterplan" />
+          <button class="masterplan-pin is-active" style="--x:76%;--y:58%" type="button" data-unit="villa-s1" aria-label="Open Villa S1" aria-pressed="true"><span>V</span><b>Villa S1</b></button>
+          <button class="masterplan-pin" style="--x:31%;--y:21%" type="button" data-unit="block-a-l33" aria-label="Open Block A L33" aria-pressed="false"><span>A</span><b>A L33</b></button>
+          <button class="masterplan-pin" style="--x:43%;--y:31%" type="button" data-unit="block-a-m34" aria-label="Open Block A M34" aria-pressed="false"><span>A</span><b>A M34</b></button>
+          <article class="masterplan-card" aria-live="polite">
+            <img data-unit-image src="assets/every-bali-unit-villa-s1.webp" alt="Villa S1" />
+            <div class="masterplan-card-copy">
+              <p><span data-unit-kind>Villa</span><small data-unit-code>S1</small></p>
+              <h3 data-unit-name>Villa S1</h3>
+              <dl>
+                <div><dt>Beds</dt><dd data-unit-beds>1</dd></div>
+                <div><dt>Baths</dt><dd data-unit-baths>1</dd></div>
+                <div><dt>Living space</dt><dd><span data-unit-area>80.83</span> m²</dd></div>
+              </dl>
+              <p class="unit-features" data-unit-features>Ocean view · Forest view · BBQ area</p>
+              <a href="https://www.every-bali.com/" target="_blank" rel="noreferrer">Open live catalog ↗</a>
+            </div>
+          </article>
+        </div>
+        <p class="masterplan-hint">Click a marker to switch the selected property</p>
+      </section>
+
+      <section class="desktop-catalog-stage reveal" data-property-catalog>
+        <div class="catalog-heading">
+          <p>04 / Desktop catalog</p>
+          <h2>From inspiration<br />to comparison.</h2>
+          <span>The desktop system turns a large inventory into scannable choices while keeping the visual language consistent with the storytelling layer.</span>
+        </div>
+        <div class="catalog-toolbar" aria-label="Filter example properties">
+          <span>Filter the sample</span>
+          <div>
+            <button class="is-active" type="button" data-catalog-filter="all" aria-pressed="true">All</button>
+            <button type="button" data-catalog-filter="villa" aria-pressed="false">Villas</button>
+            <button type="button" data-catalog-filter="apartment" aria-pressed="false">Apartments</button>
+          </div>
+        </div>
+        <div class="catalog-grid">
+          <article class="catalog-card" data-property-type="villa">
+            <div class="catalog-card-image"><img src="assets/every-bali-unit-villa-s1.webp" alt="Villa S1 exterior" /><span>Villa</span></div>
+            <div class="catalog-card-copy">
+              <div><h3>Villa S1</h3><b>80.83 m²</b></div>
+              <dl><div><dt>Beds</dt><dd>1</dd></div><div><dt>Baths</dt><dd>1</dd></div><div><dt>Views</dt><dd>Ocean / Forest</dd></div></dl>
+            </div>
+          </article>
+          <article class="catalog-card" data-property-type="apartment">
+            <div class="catalog-card-image"><img src="assets/every-bali-unit-a-l33.webp" alt="Block A L33 apartment" /><span>Apartment</span></div>
+            <div class="catalog-card-copy">
+              <div><h3>Block A L33</h3><b>89.27 m²</b></div>
+              <dl><div><dt>Beds</dt><dd>2</dd></div><div><dt>Baths</dt><dd>2</dd></div><div><dt>View</dt><dd>Ocean</dd></div></dl>
+            </div>
+          </article>
+          <article class="catalog-card" data-property-type="apartment">
+            <div class="catalog-card-image"><img src="assets/every-bali-unit-a-m34.webp" alt="Block A M34 apartment" /><span>Apartment</span></div>
+            <div class="catalog-card-copy">
+              <div><h3>Block A M34</h3><b>50.44 m²</b></div>
+              <dl><div><dt>Beds</dt><dd>1</dd></div><div><dt>Baths</dt><dd>1</dd></div><div><dt>View</dt><dd>Forest</dd></div></dl>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="bali-flow-stage reveal" aria-label="Every Bali mobile discovery flow">
+        <div class="bali-flow-heading">
+          <p>05 / Mobile product flow</p>
+          <h2>Explore.<br />Locate.<br />Decide.</h2>
+          <span>Three connected states turn a large property catalog into a clear buying journey.</span>
+        </div>
+        <div class="bali-flow-grid">
+          <figure>
+            <div class="bali-phone-shell"><img src="assets/every-bali-mobile-main-hd.png" alt="Every Bali mobile landing and destination story" /></div>
+            <figcaption><small>01</small><span>Discover the place</span></figcaption>
+          </figure>
+          <figure>
+            <div class="bali-phone-shell"><img src="assets/every-bali-map-card-hd.png" alt="Every Bali mobile masterplan and property card" /></div>
+            <figcaption><small>02</small><span>Navigate the masterplan</span></figcaption>
+          </figure>
+          <figure>
+            <div class="bali-phone-shell"><img src="assets/every-bali-unit-details-hd.png" alt="Every Bali mobile unit details and offer action" /></div>
+            <figcaption><small>03</small><span>Evaluate a unit</span></figcaption>
+          </figure>
+        </div>
+      </section>
+      <div class="media-caption"><span>Dedicated mobile states</span><span>Home / map / unit details</span></div>
+
+      <section class="case-section reveal">
+        <p class="section-label">06 / Ownership &amp; decisions</p>
+        <p class="statement">I owned the experience from information structure to the <em>final visual system.</em></p>
+        <div class="text-grid">
+          <h2>Designing both desire and decision-making.</h2>
+          <p>My scope covered information architecture, UX flows, art direction, visual design, responsive behavior, the masterplan, catalog, filters and unit-detail experience. Copywriting was outside my scope.</p>
+        </div>
+        <div class="ownership-grid">
+          <article><small>Decision 01</small><h3>Emotion before inventory</h3><p>The opening establishes place and aspiration before asking users to compare property attributes.</p></article>
+          <article><small>Decision 02</small><h3>Map as the bridge</h3><p>The masterplan connects the physical development with catalog logic, infrastructure and available unit types.</p></article>
+          <article><small>Decision 03</small><h3>Mobile as its own flow</h3><p>Story, filters, cards and unit details were reorganized for mobile instead of being compressed from desktop.</p></article>
+        </div>
+      </section>
+
+      <section class="case-section launch-block reveal">
+        <p class="section-label">07 / Launch</p>
+        <p class="statement">The complete English-language website is <em>live and in use.</em></p>
+        <div class="text-grid">
+          <h2>A full commercial experience, not a concept landing page.</h2>
+          <p>The launched product includes immersive sections, an interactive masterplan, a substantial property catalog, filtering, unit information, infrastructure content and construction-progress material. My authorship covers structure, UX, filtering logic and visual design.</p>
+        </div>
+        <a class="live-link" href="https://www.every-bali.com/" target="_blank" rel="noreferrer">Visit live website ↗</a>
+      </section>
+
+      <section class="case-outro" id="contact">
+        <p>Next case</p>
+        <a class="next-link" href="case-aleria.html"><span>Aleria</span><b>↗</b></a>
+        <div class="case-footer"><p>Daniil Zinoviev</p><p>Multidisciplinary Art Director</p><a href="mailto:reak1315@gmail.com">reak1315@gmail.com</a></div>
+      </section>
+    </main>
+  </body>
+</html>
