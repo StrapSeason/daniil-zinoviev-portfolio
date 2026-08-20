@@ -300,7 +300,6 @@ footer p { margin: 0; }
 
 .film-intro,
 .film-outro,
-.film-rail,
 .film-hint { position: absolute; z-index: 2; color: #f2f1ec; }
 
 .film-intro {
@@ -341,30 +340,6 @@ footer p { margin: 0; }
 }
 .film-outro .round-link { border-color: rgba(242, 241, 236, .38); }
 .film-outro .round-link:hover { background: #f2f1ec; color: #1a1a1a; }
-
-.film-rail {
-  left: var(--pad);
-  right: var(--pad);
-  bottom: clamp(26px, 4vh, 44px);
-  height: 1px;
-  background: rgba(242, 241, 236, .22);
-}
-.film-rail-fill {
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 0%;
-  background: #f2f1ec;
-}
-.film-rail b {
-  position: absolute;
-  top: 50%;
-  left: calc(var(--at) * 100%);
-  width: 5px;
-  height: 5px;
-  margin: -2.5px 0 0 -2.5px;
-  border-radius: 50%;
-  background: #bb2c1f;
-}
 
 .film-hint {
   right: var(--pad);

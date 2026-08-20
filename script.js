@@ -94,7 +94,6 @@ dialog.addEventListener("click", (event) => {
   const intro = section.querySelector(".film-intro");
   const outro = section.querySelector(".film-outro");
   const hint = section.querySelector(".film-hint");
-  const fill = section.querySelector(".film-rail-fill");
   const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (typeof window.createParticleVideo !== "function") return;
@@ -132,7 +131,6 @@ dialog.addEventListener("click", (event) => {
     outro.style.transform = `translateY(${(1 - inn) * 24}px)`;
 
     if (hint) hint.style.opacity = String((1 - ease(progress, 0, 0.05)) * 0.5);
-    fill.style.width = `${progress * 100}%`;
   };
 
   const tick = () => {
