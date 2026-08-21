@@ -29,14 +29,19 @@ if (motionVideos.length) {
   });
 }
 
-/* ── Every Bali hero: the draggable tile plane from the live home page ──── */
+/* ── Every Bali hero: the tile plane, ported from the live site ──────────
+   Source: every-bali-landing/src/sections/HeroSection.tsx. Same recycling pool,
+   same virtual-cell indexing, same inertia and ambient drift — measured against
+   the demo box instead of the viewport. The fisheye filter and custom cursor
+   from the original are viewport-scale effects and are left out. */
 
 const baliGallery = document.querySelector("[data-bali-gallery]");
 
 if (baliGallery) {
   const plane = baliGallery.querySelector("[data-bali-plane]");
   const hint = baliGallery.querySelector("[data-bali-hint]");
-  const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduce = window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+  const touch = window.matchMedia("(hover:none)").matches;
 
   const TILES = [
     ["assets/every-bali-hero-pool.webp", "Swimming pool"],
@@ -48,86 +53,127 @@ if (baliGallery) {
     ["assets/every-bali-hero-sauna.png", "Thermal suite"],
     ["assets/every-bali-hero-beauty.png", "Beauty"],
   ];
-  const COLS = 6, ROWS = 4;          /* the block that repeats, as on the live site */
-  const CELL = 190;
 
-  /* Hand-laid so no tile touches a copy of itself, in any direction, including
-     across the seam where the block repeats. A modulo of the index would put
-     the same image down every column. */
-  const LAYOUT = [
-    [0, 1, 2, 3, 4, 5],
-    [3, 4, 5, 6, 7, 0],
-    [6, 7, 0, 1, 2, 3],
-    [1, 2, 3, 4, 5, 6],
-  ];
-  /* A few cells sit inset, which is what stops the plane reading as a grid. */
-  const INSET = [
-    [0, 1, 0, 0, 1, 0],
-    [1, 0, 0, 1, 0, 0],
-    [0, 0, 1, 0, 0, 1],
-    [0, 1, 0, 0, 1, 0],
-  ];
+  const BLOCK_COLS = 6, BLOCK_ROWS = 4;
+  let TILE = 0, CELL = 0, COLS = 0, ROWS = 0;
+  let pool = [];
 
-  /* One block is built once; the plane holds a 2x2 grid of it, so wrapping the
-     offset by a single block width leaves the seam invisible. */
-  const frag = document.createDocumentFragment();
-  for (let by = 0; by < ROWS * 2; by++) {
-    for (let bx = 0; bx < COLS * 2; bx++) {
-      const [src, label] = TILES[LAYOUT[by % ROWS][bx % COLS]];
+  const drag = { active: false, lastX: 0, lastY: 0, moved: 0 };
+  let offX = 0, offY = 0, vx = 0, vy = 0;
+  let ax = 0, ay = 0, tax = 0, tay = 0;
+
+  const dims = () => {
+    const r = baliGallery.getBoundingClientRect();
+    TILE = Math.round(Math.max(110, Math.min(260, r.width / 4.4)));
+    CELL = TILE;
+    COLS = Math.ceil(r.width / CELL) + 3;
+    ROWS = Math.ceil(r.height / CELL) + 3;
+  };
+
+  const buildPool = () => {
+    dims();
+    plane.innerHTML = "";
+    pool = [];
+    for (let i = 0; i < COLS * ROWS; i++) {
       const tile = document.createElement("figure");
       tile.className = "bali-tile";
-      if (INSET[by % ROWS][bx % COLS]) tile.classList.add("is-inset");
-      tile.style.transform = `translate3d(${bx * CELL}px, ${by * CELL}px, 0)`;
-      tile.innerHTML = `<img src="${src}" alt="" loading="lazy" /><figcaption>${label}</figcaption>`;
-      frag.appendChild(tile);
+      tile.innerHTML = `<span class="bali-tile-media" style="width:${TILE}px;height:${TILE}px"></span><figcaption></figcaption>`;
+      tile._media = tile.querySelector(".bali-tile-media");
+      tile._cap = tile.querySelector("figcaption");
+      tile._idx = -1;
+      plane.appendChild(tile);
+      pool.push(tile);
     }
-  }
-  plane.appendChild(frag);
-
-  const SPAN_X = COLS * CELL, SPAN_Y = ROWS * CELL;
-  let x = -SPAN_X / 2, y = -SPAN_Y / 2;
-  let vx = calm ? 0 : -0.22, vy = calm ? 0 : -0.13;
-  let dragging = false, lastX = 0, lastY = 0, touched = false;
-
-  const wrap = (v, span) => ((v % span) + span) % span - span;
-  const paint = () => {
-    plane.style.transform = `translate3d(${wrap(x, SPAN_X)}px, ${wrap(y, SPAN_Y)}px, 0)`;
   };
 
-  const drift = () => {
-    if (!dragging) { x += vx; y += vy; paint(); }
-    requestAnimationFrame(drift);
+  const setContent = (tile, cx, cy) => {
+    const bx = ((cx % BLOCK_COLS) + BLOCK_COLS) % BLOCK_COLS;
+    const by = ((cy % BLOCK_ROWS) + BLOCK_ROWS) % BLOCK_ROWS;
+    const idx = (by * BLOCK_COLS + bx) % TILES.length;
+    if (idx === tile._idx) return;
+    tile._idx = idx;
+    tile._media.style.backgroundImage = `url("${TILES[idx][0]}")`;
+    tile._cap.textContent = TILES[idx][1];
   };
 
-  baliGallery.addEventListener("pointerdown", (event) => {
-    dragging = true;
-    touched = true;
-    lastX = event.clientX;
-    lastY = event.clientY;
-    baliGallery.setPointerCapture(event.pointerId);
+  const layout = (ox, oy) => {
+    const modX = ((ox % CELL) + CELL) % CELL;
+    const modY = ((oy % CELL) + CELL) % CELL;
+    const baseX = -Math.floor(ox / CELL) - 1;
+    const baseY = -Math.floor(oy / CELL) - 1;
+    let k = 0;
+    for (let j = 0; j < ROWS; j++) {
+      for (let i = 0; i < COLS; i++) {
+        const tile = pool[k++];
+        tile.style.transform = `translate3d(${i * CELL + modX - CELL}px,${j * CELL + modY - CELL}px,0)`;
+        setContent(tile, i + baseX, j + baseY);
+      }
+    }
+  };
+
+  const onPointerDown = (event) => {
+    if (touch) return;
+    drag.active = true;
+    drag.moved = 0;
+    drag.lastX = event.clientX;
+    drag.lastY = event.clientY;
+    vx = vy = 0;
     baliGallery.classList.add("is-dragging");
+    try { baliGallery.setPointerCapture(event.pointerId); } catch { /* noop */ }
+    if (!reduce) plane.style.transform = "scale(.965)";
     if (hint) hint.style.opacity = "0";
-  });
-
-  baliGallery.addEventListener("pointermove", (event) => {
-    if (!dragging) return;
-    x += event.clientX - lastX;
-    y += event.clientY - lastY;
-    lastX = event.clientX;
-    lastY = event.clientY;
-    paint();
-  });
-
-  const release = () => {
-    dragging = false;
-    baliGallery.classList.remove("is-dragging");
   };
-  baliGallery.addEventListener("pointerup", release);
-  baliGallery.addEventListener("pointercancel", release);
-  baliGallery.addEventListener("pointerleave", release);
 
-  paint();
-  if (!calm) requestAnimationFrame(drift);
+  const onPointerMove = (event) => {
+    const r = baliGallery.getBoundingClientRect();
+    if (!touch && !reduce) {
+      const nx = ((event.clientX - r.left) / r.width - 0.5) * 2;
+      const ny = ((event.clientY - r.top) / r.height - 0.5) * 2;
+      tax = -nx * 26;
+      tay = -ny * 26;
+    }
+    if (!drag.active) return;
+    const dx = event.clientX - drag.lastX, dy = event.clientY - drag.lastY;
+    offX += dx; offY += dy;
+    drag.moved += Math.abs(dx) + Math.abs(dy);
+    vx += (dx - vx) * 0.4; vy += (dy - vy) * 0.4;
+    drag.lastX = event.clientX; drag.lastY = event.clientY;
+  };
+
+  const endDrag = () => {
+    if (!drag.active) return;
+    drag.active = false;
+    baliGallery.classList.remove("is-dragging");
+    plane.style.transform = "scale(1)";
+  };
+
+  const frame = () => {
+    if (!drag.active && !reduce) {
+      offX += vx; offY += vy;
+      vx *= 0.92; vy *= 0.92;
+      if (Math.abs(vx) < 0.01) vx = 0;
+      if (Math.abs(vy) < 0.01) vy = 0;
+    }
+    ax += (tax - ax) * 0.06; ay += (tay - ay) * 0.06;
+    layout(offX + ax, offY + ay);
+    requestAnimationFrame(frame);
+  };
+
+  let resizeTimer = 0;
+  addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { buildPool(); layout(offX + ax, offY + ay); }, 150);
+  });
+
+  buildPool();
+  offX = -CELL * 0.5; offY = -CELL * 0.4;
+  layout(offX, offY);
+  requestAnimationFrame(frame);
+
+  baliGallery.addEventListener("pointerdown", onPointerDown);
+  addEventListener("pointermove", onPointerMove);
+  addEventListener("pointerup", endDrag);
+  addEventListener("pointercancel", endDrag);
 }
 
 const masterplan = document.querySelector("[data-masterplan]");
