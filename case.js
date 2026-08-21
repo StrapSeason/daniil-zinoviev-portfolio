@@ -42,21 +42,41 @@ if (baliGallery) {
     ["assets/every-bali-hero-pool.webp", "Swimming pool"],
     ["assets/every-bali-hero-gym.webp", "Gym"],
     ["assets/every-bali-hero-workout.webp", "Workout zone"],
-    ["assets/every-bali-hero-spa.png", "Spa"],
+    ["assets/every-bali-hero-running.png", "Running track"],
     ["assets/every-bali-hero-surf.png", "Surf"],
+    ["assets/every-bali-hero-spa.png", "Spa"],
     ["assets/every-bali-hero-sauna.png", "Thermal suite"],
+    ["assets/every-bali-hero-beauty.png", "Beauty"],
   ];
   const COLS = 6, ROWS = 4;          /* the block that repeats, as on the live site */
   const CELL = 190;
+
+  /* Hand-laid so no tile touches a copy of itself, in any direction, including
+     across the seam where the block repeats. A modulo of the index would put
+     the same image down every column. */
+  const LAYOUT = [
+    [0, 1, 2, 3, 4, 5],
+    [3, 4, 5, 6, 7, 0],
+    [6, 7, 0, 1, 2, 3],
+    [1, 2, 3, 4, 5, 6],
+  ];
+  /* A few cells sit inset, which is what stops the plane reading as a grid. */
+  const INSET = [
+    [0, 1, 0, 0, 1, 0],
+    [1, 0, 0, 1, 0, 0],
+    [0, 0, 1, 0, 0, 1],
+    [0, 1, 0, 0, 1, 0],
+  ];
 
   /* One block is built once; the plane holds a 2x2 grid of it, so wrapping the
      offset by a single block width leaves the seam invisible. */
   const frag = document.createDocumentFragment();
   for (let by = 0; by < ROWS * 2; by++) {
     for (let bx = 0; bx < COLS * 2; bx++) {
-      const [src, label] = TILES[(by % ROWS * COLS + (bx % COLS)) % TILES.length];
+      const [src, label] = TILES[LAYOUT[by % ROWS][bx % COLS]];
       const tile = document.createElement("figure");
       tile.className = "bali-tile";
+      if (INSET[by % ROWS][bx % COLS]) tile.classList.add("is-inset");
       tile.style.transform = `translate3d(${bx * CELL}px, ${by * CELL}px, 0)`;
       tile.innerHTML = `<img src="${src}" alt="" loading="lazy" /><figcaption>${label}</figcaption>`;
       frag.appendChild(tile);
