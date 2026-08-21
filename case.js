@@ -29,21 +29,85 @@ if (motionVideos.length) {
   });
 }
 
-const baliScene = document.querySelector("[data-bali-scene]");
+/* ── Every Bali hero: the draggable tile plane from the live home page ──── */
 
-if (baliScene) {
-  baliScene.addEventListener("pointermove", (event) => {
-    const rect = baliScene.getBoundingClientRect();
-    const x = ((event.clientX - rect.left) / rect.width - 0.5) * -14;
-    const y = ((event.clientY - rect.top) / rect.height - 0.5) * -10;
-    baliScene.style.setProperty("--scene-x", `${x}px`);
-    baliScene.style.setProperty("--scene-y", `${y}px`);
+const baliGallery = document.querySelector("[data-bali-gallery]");
+
+if (baliGallery) {
+  const plane = baliGallery.querySelector("[data-bali-plane]");
+  const hint = baliGallery.querySelector("[data-bali-hint]");
+  const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const TILES = [
+    ["assets/every-bali-hero-pool.webp", "Swimming pool"],
+    ["assets/every-bali-hero-gym.webp", "Gym"],
+    ["assets/every-bali-hero-workout.webp", "Workout zone"],
+    ["assets/every-bali-hero-spa.png", "Spa"],
+    ["assets/every-bali-hero-surf.png", "Surf"],
+    ["assets/every-bali-hero-sauna.png", "Thermal suite"],
+  ];
+  const COLS = 6, ROWS = 4;          /* the block that repeats, as on the live site */
+  const CELL = 190;
+
+  /* One block is built once; the plane holds a 2x2 grid of it, so wrapping the
+     offset by a single block width leaves the seam invisible. */
+  const frag = document.createDocumentFragment();
+  for (let by = 0; by < ROWS * 2; by++) {
+    for (let bx = 0; bx < COLS * 2; bx++) {
+      const [src, label] = TILES[(by % ROWS * COLS + (bx % COLS)) % TILES.length];
+      const tile = document.createElement("figure");
+      tile.className = "bali-tile";
+      tile.style.transform = `translate3d(${bx * CELL}px, ${by * CELL}px, 0)`;
+      tile.innerHTML = `<img src="${src}" alt="" loading="lazy" /><figcaption>${label}</figcaption>`;
+      frag.appendChild(tile);
+    }
+  }
+  plane.appendChild(frag);
+
+  const SPAN_X = COLS * CELL, SPAN_Y = ROWS * CELL;
+  let x = -SPAN_X / 2, y = -SPAN_Y / 2;
+  let vx = calm ? 0 : -0.22, vy = calm ? 0 : -0.13;
+  let dragging = false, lastX = 0, lastY = 0, touched = false;
+
+  const wrap = (v, span) => ((v % span) + span) % span - span;
+  const paint = () => {
+    plane.style.transform = `translate3d(${wrap(x, SPAN_X)}px, ${wrap(y, SPAN_Y)}px, 0)`;
+  };
+
+  const drift = () => {
+    if (!dragging) { x += vx; y += vy; paint(); }
+    requestAnimationFrame(drift);
+  };
+
+  baliGallery.addEventListener("pointerdown", (event) => {
+    dragging = true;
+    touched = true;
+    lastX = event.clientX;
+    lastY = event.clientY;
+    baliGallery.setPointerCapture(event.pointerId);
+    baliGallery.classList.add("is-dragging");
+    if (hint) hint.style.opacity = "0";
   });
 
-  baliScene.addEventListener("pointerleave", () => {
-    baliScene.style.setProperty("--scene-x", "0px");
-    baliScene.style.setProperty("--scene-y", "0px");
+  baliGallery.addEventListener("pointermove", (event) => {
+    if (!dragging) return;
+    x += event.clientX - lastX;
+    y += event.clientY - lastY;
+    lastX = event.clientX;
+    lastY = event.clientY;
+    paint();
   });
+
+  const release = () => {
+    dragging = false;
+    baliGallery.classList.remove("is-dragging");
+  };
+  baliGallery.addEventListener("pointerup", release);
+  baliGallery.addEventListener("pointercancel", release);
+  baliGallery.addEventListener("pointerleave", release);
+
+  paint();
+  if (!calm) requestAnimationFrame(drift);
 }
 
 const masterplan = document.querySelector("[data-masterplan]");
