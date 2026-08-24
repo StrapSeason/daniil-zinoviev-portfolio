@@ -61,7 +61,7 @@ img { display: block; max-width: 100%; }
 .touchpoint-stage.single-touchpoint { display:block; }
 .touchpoint-stage.single-touchpoint figure { max-width:620px; margin:0 auto; }
 .system-list { list-style: none; margin: 90px 0 0; padding: 0; }
-.system-list li { display: grid; grid-template-columns: 70px 1fr auto; gap: 20px; padding: 18px 0; border-top: 1px solid var(--line); font-size: clamp(17px, 2vw, 29px); letter-spacing: -.025em; }
+.system-list li { display: grid; grid-template-columns: 1fr auto; gap: 20px; padding: 18px 0; border-top: 1px solid var(--line); font-size: clamp(17px, 2vw, 29px); letter-spacing: -.025em; }
 .system-list li:last-child { border-bottom: 1px solid var(--line); }
 .system-list em { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; font-style: normal; padding-top: 7px; }
 .role-block { background: #111; color: #f0efe9; }
@@ -182,8 +182,7 @@ img { display: block; max-width: 100%; }
 .logic-panel-copy h3 { margin:0 0 24px; font-size:clamp(42px,5vw,80px); line-height:.88; letter-spacing:-.06em; font-weight:500; }
 .logic-panel-copy > span { display:block; max-width:600px; color:#666761; font-size:clamp(16px,1.35vw,21px); line-height:1.4; }
 .logic-flow { margin:0; padding:0; list-style:none; border-top:1px solid rgba(0,0,0,.18); }
-.logic-flow li { display:grid; grid-template-columns:40px 1fr; gap:12px; padding:15px 0; border-bottom:1px solid rgba(0,0,0,.18); }
-.logic-flow small { padding-top:3px; color:#3868e5; font:9px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+.logic-flow li { display:grid; grid-template-columns:1fr; gap:12px; padding:15px 0; border-bottom:1px solid rgba(0,0,0,.18); }
 .logic-flow div { display:grid; grid-template-columns:.7fr 1.3fr; gap:20px; }
 .logic-flow b { font-size:14px; font-weight:500; }
 .logic-flow span { color:#74756f; font-size:13px; line-height:1.35; }
@@ -480,7 +479,7 @@ img { display: block; max-width: 100%; }
   .ownership-grid article { min-height:230px; }
   .bali-flow-heading { grid-template-columns:1fr 1fr; }
   .bali-flow-heading span { grid-column:2; }
-  .system-list li { grid-template-columns: 40px 1fr; }
+  .system-list li { grid-template-columns: 1fr auto; }
   .system-list li em { display: none; }
   .case-footer { grid-template-columns: 1fr auto; }
   .case-footer p:nth-child(2) { display: none; }

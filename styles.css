@@ -167,7 +167,7 @@ nav a:hover::after, .contact-links a:hover::after { right: 0; }
 .manifesto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10vw; margin-top: 100px; }
 .manifesto-grid > p { max-width: 620px; margin: 0; font-size: clamp(22px, 2.4vw, 38px); line-height: 1.12; letter-spacing: -.035em; }
 .manifesto-grid ul { list-style: none; margin: 0; padding: 0; }
-.manifesto-grid li { display: grid; grid-template-columns: 45px 1fr; padding: 14px 0; border-top: 1px solid var(--line); font-size: 16px; }
+.manifesto-grid li { display: grid; grid-template-columns: 1fr; padding: 14px 0; border-top: 1px solid var(--line); font-size: 16px; }
 .manifesto-grid li:last-child { border-bottom: 1px solid var(--line); }
 .manifesto-grid li span { color: #86857f; font-size: 11px; padding-top: 3px; }
 
