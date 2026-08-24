@@ -63,7 +63,6 @@ img { display: block; max-width: 100%; }
 .system-list { list-style: none; margin: 90px 0 0; padding: 0; }
 .system-list li { display: grid; grid-template-columns: 70px 1fr auto; gap: 20px; padding: 18px 0; border-top: 1px solid var(--line); font-size: clamp(17px, 2vw, 29px); letter-spacing: -.025em; }
 .system-list li:last-child { border-bottom: 1px solid var(--line); }
-.system-list small { color: #85847e; font-size: 10px; letter-spacing: .08em; padding-top: 7px; }
 .system-list em { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; font-style: normal; padding-top: 7px; }
 .role-block { background: #111; color: #f0efe9; }
 .role-block .statement em { color: var(--green); }
@@ -173,7 +172,6 @@ img { display: block; max-width: 100%; }
 .logic-tabs { display:grid; grid-template-columns:repeat(3,1fr); border-bottom:1px solid rgba(0,0,0,.18); }
 .logic-tabs button { display:flex; align-items:center; justify-content:space-between; min-height:80px; padding:18px 22px; border:0; border-right:1px solid rgba(0,0,0,.18); background:transparent; color:#777872; font:inherit; font-size:clamp(18px,2vw,30px); letter-spacing:-.035em; cursor:pointer; transition:background .25s,color .25s; }
 .logic-tabs button:last-child { border-right:0; }
-.logic-tabs button span { font:9px/1 ui-monospace,SFMono-Regular,Menlo,monospace; color:#83847f; }
 .logic-tabs button:hover { background:#d9d9d3; color:#111; }
 .logic-tabs button.is-active { background:#4e7fff; color:#fff; }
 .logic-tabs button.is-active span { color:#c9d5ff; }
@@ -362,7 +360,6 @@ img { display: block; max-width: 100%; }
 .desktop-demo-meta span:last-child { text-align:right; }
 .motion-principles { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:22px; }
 .motion-principles p { display:flex; gap:18px; margin:0; padding-top:15px; border-top:1px solid rgba(255,255,255,.22); font-size:13px; }
-.motion-principles small { color:#8ac5b8; }
 .desktop-live-link { display:inline-flex; margin-top:34px; padding:12px 16px; border:1px solid rgba(255,255,255,.45); border-radius:999px; color:#d8d9d3; font-size:9px; text-transform:uppercase; letter-spacing:.09em; transition:color .25s,border-color .25s,background .25s; }
 .desktop-live-link:hover { color:#101410; border-color:#8ac5b8; background:#8ac5b8; }
 @keyframes bali-desktop-drift { to { transform:translate(calc(-1% + var(--scene-x)),calc(-3% + var(--scene-y))) scale(1.06); } }
@@ -431,7 +428,6 @@ img { display: block; max-width: 100%; }
 .bali-phone-shell { overflow:hidden; padding:8px; border:1px solid rgba(255,255,255,.12); border-radius:clamp(22px,2vw,34px); background:#0d0f0d; box-shadow:0 45px 100px rgba(0,0,0,.34); }
 .bali-phone-shell img { width:100%; border-radius:clamp(15px,1.5vw,25px); }
 .bali-flow-grid figcaption { display:flex; gap:18px; margin-top:18px; padding-top:13px; border-top:1px solid rgba(255,255,255,.2); font-size:11px; text-transform:uppercase; letter-spacing:.08em; }
-.bali-flow-grid figcaption small { color:#a8cfc4; }
 .ownership-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:clamp(70px,8vw,120px); }
 .ownership-grid article { min-height:300px; padding:22px; border:1px solid var(--line); border-radius:22px; display:flex; flex-direction:column; }
 .ownership-grid small { color:#4d8d80; font-size:9px; text-transform:uppercase; letter-spacing:.09em; }
@@ -510,7 +506,6 @@ img { display: block; max-width: 100%; }
   .logic-pipeline-group { min-height:145px; }
   .logic-explorer { border-radius:0; }
   .logic-tabs button { min-height:64px; padding:14px 12px; font-size:17px; }
-  .logic-tabs button span { display:none; }
   .logic-panel { padding:50px var(--pad); }
   .logic-panel-copy > p { margin-bottom:40px; }
   .logic-flow div { grid-template-columns:1fr; gap:5px; }
