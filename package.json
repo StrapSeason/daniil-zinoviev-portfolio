@@ -1,0 +1,7 @@
+{
+  "name": "daniil-zinoviev-portfolio",
+  "private": true,
+  "type": "module",
+  "scripts": { "extract": "node tools/extract-strings.mjs", "build:ru": "node tools/build-ru.mjs" },
+  "devDependencies": { "node-html-parser": "^7.0.1" }
+}

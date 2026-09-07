@@ -1,3 +1,6 @@
+const ASSET_BASE = document.documentElement.dataset.assetBase || "";
+const t = (s) => (typeof s === "string" && window.I18N && window.I18N[s]) || s;
+const tr = (v) => Array.isArray(v) ? v.map(tr) : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, tr(x)])) : t(v);
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
@@ -48,14 +51,14 @@ if (baliGallery) {
   const touch = window.matchMedia("(hover:none)").matches;
 
   const TILES = [
-    ["assets/every-bali-hero-pool.webp", "Swimming pool"],
-    ["assets/every-bali-hero-gym.webp", "Gym"],
-    ["assets/every-bali-hero-workout.webp", "Workout"],
-    ["assets/every-bali-hero-running.png", "Running track"],
-    ["assets/every-bali-hero-surf.png", "Surf school"],
-    ["assets/every-bali-hero-spa.png", "SPA"],
-    ["assets/every-bali-hero-sauna.png", "Thermal zone"],
-    ["assets/every-bali-hero-beauty.png", "Beauty"],
+    [ASSET_BASE + "assets/every-bali-hero-pool.webp", "Swimming pool"],
+    [ASSET_BASE + "assets/every-bali-hero-gym.webp", "Gym"],
+    [ASSET_BASE + "assets/every-bali-hero-workout.webp", "Workout"],
+    [ASSET_BASE + "assets/every-bali-hero-running.png", "Running track"],
+    [ASSET_BASE + "assets/every-bali-hero-surf.png", "Surf school"],
+    [ASSET_BASE + "assets/every-bali-hero-spa.png", "SPA"],
+    [ASSET_BASE + "assets/every-bali-hero-sauna.png", "Thermal zone"],
+    [ASSET_BASE + "assets/every-bali-hero-beauty.png", "Beauty"],
   ];
 
   const BLOCK_COLS = 6, BLOCK_ROWS = 4;
@@ -107,7 +110,7 @@ if (baliGallery) {
     if (idx === tile._idx) return;
     tile._idx = idx;
     tile._media.style.backgroundImage = `url("${TILES[idx][0]}")`;
-    tile._cap.textContent = TILES[idx][1];
+    tile._cap.textContent = t(TILES[idx][1]);
   };
 
   const layout = (ox, oy) => {
@@ -266,7 +269,7 @@ if (masterplan) {
       baths: "1",
       area: "80.83",
       features: "Ocean view · Forest view · BBQ area",
-      image: "assets/every-bali-unit-villa-s1.webp",
+      image: ASSET_BASE + "assets/every-bali-unit-villa-s1.webp",
     },
     "block-a-l33": {
       kind: "Apartment",
@@ -276,7 +279,7 @@ if (masterplan) {
       baths: "2",
       area: "89.27",
       features: "Ocean view · Fully furnished · Designer interior",
-      image: "assets/every-bali-unit-a-l33.webp",
+      image: ASSET_BASE + "assets/every-bali-unit-a-l33.webp",
     },
     "block-a-m34": {
       kind: "Apartment",
@@ -286,7 +289,7 @@ if (masterplan) {
       baths: "1",
       area: "50.44",
       features: "Forest view · Fully furnished · Designer interior",
-      image: "assets/every-bali-unit-a-m34.webp",
+      image: ASSET_BASE + "assets/every-bali-unit-a-m34.webp",
     },
   };
 
@@ -294,7 +297,7 @@ if (masterplan) {
   const pins = masterplan.querySelectorAll("[data-unit]");
 
   const setUnit = (key) => {
-    const unit = units[key];
+    const unit = tr(units[key]);
     if (!unit) return;
 
     pins.forEach((pin) => {
@@ -372,7 +375,7 @@ const lumeryWorkfile = document.querySelector("[data-lumery-workfile]");
 if (lumeryWorkfile) {
   const workfileViews = {
     architecture: {
-      image: "assets/lumery-figma-architecture.jpg",
+      image: ASSET_BASE + "assets/lumery-figma-architecture.jpg",
       alt: "Lumery app architecture, user scenarios and flow charts in Figma",
       path: "Exploration / App architecture and logic",
       stage: "Product logic",
@@ -381,7 +384,7 @@ if (lumeryWorkfile) {
       index: "01 / 06",
     },
     wireframes: {
-      image: "assets/lumery-figma-wireframes.jpg",
+      image: ASSET_BASE + "assets/lumery-figma-wireframes.jpg",
       alt: "Large Lumery wireframe workspace with connected product branches in Figma",
       path: "Exploration / Wireframes and drafts",
       stage: "Structural exploration",
@@ -390,7 +393,7 @@ if (lumeryWorkfile) {
       index: "02 / 06",
     },
     dark: {
-      image: "assets/lumery-figma-dark-flow.jpg",
+      image: ASSET_BASE + "assets/lumery-figma-dark-flow.jpg",
       alt: "Lumery dark application flow with connected screens in Figma",
       path: "Exploration / Main app flow — dark",
       stage: "Connected product flow",
@@ -399,7 +402,7 @@ if (lumeryWorkfile) {
       index: "03 / 06",
     },
     system: {
-      image: "assets/lumery-figma-system.jpg",
+      image: ASSET_BASE + "assets/lumery-figma-system.jpg",
       alt: "Lumery UI system exploration with color scales, components and states in Figma",
       path: "Exploration / UI system",
       stage: "Design system",
@@ -408,7 +411,7 @@ if (lumeryWorkfile) {
       index: "04 / 06",
     },
     review: {
-      image: "assets/lumery-figma-review.jpg",
+      image: ASSET_BASE + "assets/lumery-figma-review.jpg",
       alt: "Lumery exploration review showing multiple dated interface iterations in Figma",
       path: "Exploration / Review",
       stage: "Iteration history",
@@ -417,7 +420,7 @@ if (lumeryWorkfile) {
       index: "05 / 06",
     },
     light: {
-      image: "assets/lumery-figma-light-flow.jpg",
+      image: ASSET_BASE + "assets/lumery-figma-light-flow.jpg",
       alt: "Lumery light theme prototype flow with onboarding, profile and assistant branches in Figma",
       path: "Prototype flows / Main app — light",
       stage: "Prototype structure",
@@ -438,7 +441,7 @@ if (lumeryWorkfile) {
   const index = lumeryWorkfile.querySelector("[data-workfile-index]");
 
   const setWorkfileView = (key) => {
-    const view = workfileViews[key];
+    const view = tr(workfileViews[key]);
     if (!view) return;
 
     workfileTabs.forEach((tab) => {
@@ -471,7 +474,7 @@ const bitronixBots = document.querySelector("[data-bitronix-bots]");
 if (bitronixBots) {
   const profiles = {
     jugg: {
-      image: "assets/bitronix-bot-green.png",
+      image: ASSET_BASE + "assets/bitronix-bot-green.png",
       alt: "Jugg Bitronix strategy character",
       color: "#c7ff2f",
       kicker: "Controlled profile · 15–25%",
@@ -480,7 +483,7 @@ if (bitronixBots) {
       index: "01 / 04",
     },
     linx: {
-      image: "assets/bitronix-bot-blue.png",
+      image: ASSET_BASE + "assets/bitronix-bot-blue.png",
       alt: "Linx Bitronix strategy character",
       color: "#28b9ff",
       kicker: "Balanced profile · 25–35%",
@@ -489,7 +492,7 @@ if (bitronixBots) {
       index: "02 / 04",
     },
     vortex: {
-      image: "assets/bitronix-bot-purple.png",
+      image: ASSET_BASE + "assets/bitronix-bot-purple.png",
       alt: "Vortex Bitronix strategy character",
       color: "#9a43ff",
       kicker: "Adventurous profile · 35–50%",
@@ -498,7 +501,7 @@ if (bitronixBots) {
       index: "03 / 04",
     },
     spark: {
-      image: "assets/bitronix-bot-pink.png",
+      image: ASSET_BASE + "assets/bitronix-bot-pink.png",
       alt: "Spark Bitronix strategy character",
       color: "#ff4aa8",
       kicker: "High-energy profile · 50%+",

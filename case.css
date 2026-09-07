@@ -12,6 +12,8 @@ a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 .case-nav { position: absolute; z-index: 8; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 22px var(--pad); color: #fff; mix-blend-mode: difference; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
 .case-nav a { display: flex; align-items: center; gap: 8px; }
+.case-nav .case-nav-right { display: flex; align-items: center; gap: 18px; }
+.case-nav .lang-switch { padding: 5px 9px; border: 1px solid currentColor; border-radius: 999px; font-size: 11px; letter-spacing: .12em; }
 .case-nav .brand { font-size: 14px; font-weight: 650; letter-spacing: -.03em; text-transform: none; }
 .case-hero { position: relative; min-height: 100svh; overflow: hidden; padding: 120px var(--pad) 34px; display: flex; flex-direction: column; justify-content: space-between; }
 .case-hero .kicker { position: relative; z-index: 2; margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: .12em; }
@@ -949,3 +951,6 @@ img { display: block; max-width: 100%; }
   .bali-hero-ring { animation: none; }
   .bali-hero-plane { transition: none; }
 }
+
+html[lang="ru"] :is(h1, h2, h3, h4, p, li, span, em, a, small, figcaption, button) { overflow-wrap: anywhere; hyphens: auto; }
+html[lang="ru"] .bali-hero-demo * { hyphens: manual; }

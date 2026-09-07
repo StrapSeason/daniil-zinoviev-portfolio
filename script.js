@@ -1,3 +1,6 @@
+const ASSET_BASE = document.documentElement.dataset.assetBase || "";
+const t = (s) => (typeof s === "string" && window.I18N && window.I18N[s]) || s;
+const tr = (v) => Array.isArray(v) ? v.map(tr) : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, tr(x)])) : t(v);
 const cases = {
   aleria: {
     index: "01 / Aleria",
@@ -58,7 +61,7 @@ const dialogLink = dialog.querySelector(".dialog-link");
 
 document.querySelectorAll("[data-case] .case-open").forEach((button) => {
   button.addEventListener("click", () => {
-    const data = cases[button.closest("[data-case]").dataset.case];
+    const data = tr(cases[button.closest("[data-case]").dataset.case]);
     dialogIndex.textContent = data.index;
     dialogTitle.textContent = data.title;
     dialogLead.textContent = data.lead;
@@ -100,7 +103,7 @@ dialog.addEventListener("click", (event) => {
 
   // interactive:false — the section must not swallow the page's wheel/touch.
   const pv = window.createParticleVideo(stage, {
-    src: "assets/particle-video.mp4",
+    src: ASSET_BASE + "assets/particle-video.mp4",
     interactive: false,
     grain: false,          // its own grain is one stretched tile -> blotches
     background: "#131312"

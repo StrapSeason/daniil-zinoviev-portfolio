@@ -32,6 +32,9 @@ img { display: block; max-width: 100%; }
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
 }
 
+.lang-switch { justify-self: end; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; padding: 6px 10px; border: 1px solid currentColor; border-radius: 999px; opacity: .75; transition: opacity .2s; }
+.lang-switch:hover { opacity: 1; }
+.lang-switch::after { display: none; }
 .site-header {
   position: fixed;
   top: 0;
@@ -361,3 +364,7 @@ footer p { margin: 0; }
   .film-intro, .film-outro { opacity: 1 !important; transform: none !important; }
   .film-outro { position: static; padding: 0 var(--pad) 40px; }
 }
+
+/* Russian copy: long words must be allowed to break */
+html[lang="ru"] :is(h1, h2, h3, h4, p, li, span, em, a, small, figcaption, button) { overflow-wrap: anywhere; hyphens: auto; }
+html[lang="ru"] .bali-hero-demo * { hyphens: manual; }
