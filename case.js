@@ -38,24 +38,28 @@ if (motionVideos.length) {
 const baliGallery = document.querySelector("[data-bali-gallery]");
 
 if (baliGallery) {
+  const stage = baliGallery.querySelector("[data-bali-stage]");
   const plane = baliGallery.querySelector("[data-bali-plane]");
   const hint = baliGallery.querySelector("[data-bali-hint]");
+  const lensMap = baliGallery.querySelector("[data-bali-lensmap]");
+  const curDot = baliGallery.querySelector(".bali-cur-dot");
+  const curRing = baliGallery.querySelector(".bali-cur-ring");
   const reduce = window.matchMedia("(prefers-reduced-motion:reduce)").matches;
   const touch = window.matchMedia("(hover:none)").matches;
 
   const TILES = [
     ["assets/every-bali-hero-pool.webp", "Swimming pool"],
     ["assets/every-bali-hero-gym.webp", "Gym"],
-    ["assets/every-bali-hero-workout.webp", "Workout zone"],
+    ["assets/every-bali-hero-workout.webp", "Workout"],
     ["assets/every-bali-hero-running.png", "Running track"],
-    ["assets/every-bali-hero-surf.png", "Surf"],
-    ["assets/every-bali-hero-spa.png", "Spa"],
-    ["assets/every-bali-hero-sauna.png", "Thermal suite"],
+    ["assets/every-bali-hero-surf.png", "Surf school"],
+    ["assets/every-bali-hero-spa.png", "SPA"],
+    ["assets/every-bali-hero-sauna.png", "Thermal zone"],
     ["assets/every-bali-hero-beauty.png", "Beauty"],
   ];
 
   const BLOCK_COLS = 6, BLOCK_ROWS = 4;
-  let TILE = 0, CELL = 0, COLS = 0, ROWS = 0;
+  let W = 0, H = 0, TILE = 0, CELL = 0, COLS = 0, ROWS = 0;
   let pool = [];
 
   const drag = { active: false, lastX: 0, lastY: 0, moved: 0 };
@@ -64,10 +68,25 @@ if (baliGallery) {
 
   const dims = () => {
     const r = baliGallery.getBoundingClientRect();
-    TILE = Math.round(Math.max(110, Math.min(260, r.width / 4.4)));
+    W = r.width; H = r.height;
+    TILE = Math.round(Math.max(W < 720 ? 110 : 150, Math.min(320, W / 4.4)));
     CELL = TILE;
-    COLS = Math.ceil(r.width / CELL) + 3;
-    ROWS = Math.ceil(r.height / CELL) + 3;
+    COLS = Math.ceil(W / CELL) + 3;
+    ROWS = Math.ceil(H / CELL) + 3;
+  };
+
+  const makeTile = () => {
+    const tile = document.createElement("figure");
+    tile.className = "bali-tile";
+    tile.innerHTML = `<span class="bali-tile-media" style="width:${TILE}px;height:${TILE}px"></span><figcaption></figcaption>`;
+    tile._media = tile.querySelector(".bali-tile-media");
+    tile._cap = tile.querySelector("figcaption");
+    tile._idx = -1;
+    if (!touch) {
+      tile.addEventListener("mouseenter", () => { if (!drag.active) baliGallery.classList.add("is-on-tile"); });
+      tile.addEventListener("mouseleave", () => baliGallery.classList.remove("is-on-tile"));
+    }
+    return tile;
   };
 
   const buildPool = () => {
@@ -75,12 +94,7 @@ if (baliGallery) {
     plane.innerHTML = "";
     pool = [];
     for (let i = 0; i < COLS * ROWS; i++) {
-      const tile = document.createElement("figure");
-      tile.className = "bali-tile";
-      tile.innerHTML = `<span class="bali-tile-media" style="width:${TILE}px;height:${TILE}px"></span><figcaption></figcaption>`;
-      tile._media = tile.querySelector(".bali-tile-media");
-      tile._cap = tile.querySelector("figcaption");
-      tile._idx = -1;
+      const tile = makeTile();
       plane.appendChild(tile);
       pool.push(tile);
     }
@@ -111,6 +125,41 @@ if (baliGallery) {
     }
   };
 
+  /* barrel lens: a radial displacement map, same curve as the live hero */
+  const buildLensMap = () => {
+    const aspect = W / H;
+    const mw = 128, mh = Math.max(8, Math.round(128 / aspect));
+    const canvas = document.createElement("canvas");
+    canvas.width = mw; canvas.height = mh;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return "";
+    const img = ctx.createImageData(mw, mh);
+    const power = 2.4;
+    for (let y = 0; y < mh; y++) {
+      for (let x = 0; x < mw; x++) {
+        const nx = (x / (mw - 1)) * 2 - 1, ny = (y / (mh - 1)) * 2 - 1;
+        const d = Math.min(1, Math.hypot(nx, ny) / Math.SQRT2);
+        const f = Math.pow(d, power);
+        const px = Math.max(-1, Math.min(1, nx * f)), py = Math.max(-1, Math.min(1, ny * f));
+        const o = (y * mw + x) * 4;
+        img.data[o] = (0.5 + 0.5 * px) * 255;
+        img.data[o + 1] = (0.5 + 0.5 * py) * 255;
+        img.data[o + 2] = 128;
+        img.data[o + 3] = 255;
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+    return canvas.toDataURL();
+  };
+  const applyLens = () => {
+    if (!lensMap) return;
+    const href = buildLensMap();
+    lensMap.setAttribute("href", href);
+    lensMap.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", href);
+    lensMap.setAttribute("width", String(W));
+    lensMap.setAttribute("height", String(H));
+  };
+
   const onPointerDown = (event) => {
     if (touch) return;
     drag.active = true;
@@ -118,19 +167,20 @@ if (baliGallery) {
     drag.lastX = event.clientX;
     drag.lastY = event.clientY;
     vx = vy = 0;
-    baliGallery.classList.add("is-dragging");
-    try { baliGallery.setPointerCapture(event.pointerId); } catch { /* noop */ }
+    plane.classList.add("dragging");
+    baliGallery.classList.add("is-grabbing");
+    try { stage.setPointerCapture(event.pointerId); } catch { /* noop */ }
     if (!reduce) plane.style.transform = "scale(.965)";
     if (hint) hint.style.opacity = "0";
   };
 
   const onPointerMove = (event) => {
-    const r = baliGallery.getBoundingClientRect();
     if (!touch && !reduce) {
+      const r = baliGallery.getBoundingClientRect();
       const nx = ((event.clientX - r.left) / r.width - 0.5) * 2;
       const ny = ((event.clientY - r.top) / r.height - 0.5) * 2;
-      tax = -nx * 26;
-      tay = -ny * 26;
+      tax = -nx * 42;
+      tay = -ny * 42;
     }
     if (!drag.active) return;
     const dx = event.clientX - drag.lastX, dy = event.clientY - drag.lastY;
@@ -143,7 +193,8 @@ if (baliGallery) {
   const endDrag = () => {
     if (!drag.active) return;
     drag.active = false;
-    baliGallery.classList.remove("is-dragging");
+    plane.classList.remove("dragging");
+    baliGallery.classList.remove("is-grabbing");
     plane.style.transform = "scale(1)";
   };
 
@@ -159,21 +210,48 @@ if (baliGallery) {
     requestAnimationFrame(frame);
   };
 
+  /* cursor: the dot snaps, the ring eases behind it */
+  let cx = 0, cy = 0, rx = 0, ry = 0;
+  const trackCursor = (event) => {
+    const r = baliGallery.getBoundingClientRect();
+    cx = event.clientX - r.left; cy = event.clientY - r.top;
+    if (curDot) curDot.style.transform = `translate(${cx}px,${cy}px)`;
+  };
+  const ringFrame = () => {
+    rx += (cx - rx) * 0.18; ry += (cy - ry) * 0.18;
+    if (curRing) curRing.style.transform = `translate(${rx}px,${ry}px)`;
+    requestAnimationFrame(ringFrame);
+  };
+
   let resizeTimer = 0;
   addEventListener("resize", () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => { buildPool(); layout(offX + ax, offY + ay); }, 150);
+    resizeTimer = setTimeout(() => {
+      buildPool();
+      layout(offX + ax, offY + ay);
+      if (!reduce && !touch) applyLens();
+    }, 150);
   });
 
   buildPool();
+  if (!reduce && !touch) {
+    applyLens();
+    plane.style.filter = "url(#bali-lens)";
+  }
   offX = -CELL * 0.5; offY = -CELL * 0.4;
   layout(offX, offY);
   requestAnimationFrame(frame);
 
-  baliGallery.addEventListener("pointerdown", onPointerDown);
+  stage.addEventListener("pointerdown", onPointerDown);
   addEventListener("pointermove", onPointerMove);
   addEventListener("pointerup", endDrag);
   addEventListener("pointercancel", endDrag);
+  if (!touch) {
+    addEventListener("pointermove", trackCursor);
+    stage.addEventListener("pointerenter", () => baliGallery.classList.add("is-cursor"));
+    stage.addEventListener("pointerleave", () => baliGallery.classList.remove("is-cursor"));
+    requestAnimationFrame(ringFrame);
+  }
 }
 
 const masterplan = document.querySelector("[data-masterplan]");

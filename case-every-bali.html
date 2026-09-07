@@ -9,7 +9,10 @@
     <title>Every Bali — Daniil Zinoviev</title>
     <link rel="stylesheet" href="case.css" />
     <script src="case.js" defer></script>
-  </head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&display=swap" rel="stylesheet" />
+</head>
   <body class="bali-page">
     <nav class="case-nav">
       <a href="index.html#work">← <span>All work</span></a>
@@ -49,14 +52,29 @@
         </div>
 
         <div class="bali-hero-demo" data-bali-gallery>
-          <div class="bali-hero-plane" data-bali-plane></div>
-          <div class="bali-hero-nav"><span>Complex</span><span>Villas &amp; Apts</span><strong>EVERY BALI</strong><span>Infrastructure</span><span>About</span></div>
-          <div class="bali-hero-title">
-            <span>EVERY</span>
-            <small>Your rhythm. Your rules.<br />Your surroundings.</small>
+          <div class="bali-cur-ring" aria-hidden="true"><span>View</span></div>
+          <div class="bali-cur-dot" aria-hidden="true"></div>
+          <svg width="0" height="0" aria-hidden="true" style="position:absolute;pointer-events:none">
+            <filter id="bali-lens" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB" primitiveUnits="userSpaceOnUse">
+              <feImage data-bali-lensmap preserveAspectRatio="none" x="0" y="0" result="map" />
+              <feDisplacementMap in="SourceGraphic" in2="map" scale="-130" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+          </svg>
+          <div class="bali-hero-stage" data-bali-stage role="application" aria-label="Draggable property grid">
+            <div class="bali-hero-plane" data-bali-plane></div>
           </div>
-          <div class="bali-hero-actions"><b>Book an online tour</b><i>Get the presentation and available units</i></div>
-          <p class="bali-hero-hint" data-bali-hint>Drag to explore</p>
+          <div class="bali-hero-edgeblur" aria-hidden="true"></div>
+          <div class="bali-hero-vignette" aria-hidden="true"></div>
+          <div class="bali-hero-topscrim" aria-hidden="true"></div>
+          <div class="bali-hero-nav"><span>Complex</span><span>Villas &amp; Apts</span><strong>EVERY BALI</strong><span>Infrastructure</span><span>About</span></div>
+          <div class="bali-hero-ui">
+            <div class="bali-hero-head">
+              <p class="bali-hero-big">EVERY</p>
+              <p class="bali-hero-tag">Your rhythm. Your rules.<br />Your surroundings.</p>
+            </div>
+            <div class="bali-hero-cta"><span class="bali-hero-btn is-outline">Book an online tour</span><span class="bali-hero-btn is-primary">Get the presentation and available units</span></div>
+          </div>
+          <p class="bali-hero-hint" data-bali-hint><span>Drag to explore</span><span class="bali-hero-ring">⊕</span></p>
         </div>
 
         <div class="motion-principles">
