@@ -123,9 +123,11 @@ dialog.addEventListener("click", (event) => {
   };
 
   const paint = () => {
-    const out = ease(progress, 0.03, 0.14);
-    intro.style.opacity = String(1 - out);
-    intro.style.transform = `translateY(${-out * 40}px)`;
+    if (intro) {
+      const out = ease(progress, 0.03, 0.14);
+      intro.style.opacity = String(1 - out);
+      intro.style.transform = `translateY(${-out * 40}px)`;
+    }
 
     // Scroll position alone runs ahead of the particle field, which is capped by
     // the stage throttle and by playback; gate the headline on the field itself.
