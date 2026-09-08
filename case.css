@@ -952,5 +952,8 @@ img { display: block; max-width: 100%; }
   .bali-hero-plane { transition: none; }
 }
 
-html[lang="ru"] :is(h1, h2, h3, h4, p, li, span, em, a, small, figcaption, button) { overflow-wrap: anywhere; hyphens: auto; }
+html[lang="ru"] :is(h1, h2, h3, h4, p, li, span, em, a, small, figcaption, button) { overflow-wrap: anywhere; hyphens: manual; }
+@media (max-width: 720px) {
+  html[lang="ru"] :is(h1, h2, h3, h4, p, li, span, em, a, small, figcaption, button) { hyphens: auto; -webkit-hyphenate-limit-before: 5; -webkit-hyphenate-limit-after: 5; hyphenate-limit-chars: 12 5 5; }
+}
 html[lang="ru"] .bali-hero-demo * { hyphens: manual; }
